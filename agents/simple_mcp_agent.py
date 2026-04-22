@@ -10,6 +10,9 @@ from langgraph.types import Command
 from copy import deepcopy
 import json
 import os
+from langchain_openai import ChatOpenAI
+
+
 
 
 workdir = os.getcwd()
@@ -101,12 +104,12 @@ async def main():
             "simple_server": {
                 "transport": "stdio",  # Local subprocess communication
                 "command": "python",
-                "args": [os.path.join(workdir,"servers/simple_server.py")]
+                "args": [os.path.join(workdir,"..","servers/simple_server.py")]
             },
             "mensa_server": {
                 "transport": "stdio",  # Local subprocess communication
                 "command": "python",
-                "args": [os.path.join(workdir,"servers/parse_mensaar.py")]
+                "args": [os.path.join(workdir,"..","servers/parse_mensaar.py")]
             }
         }
     )
@@ -119,8 +122,17 @@ async def main():
 
     tools = await client.get_tools()
 
+    model = ChatOpenAI(
+        model="gpt-4o-mini",
+        temperature=0.1,
+        max_tokens=1000,
+        timeout=30
+    )
+
     agent = create_deep_agent(
-        "gpt-4o-mini",
+        #"gpt-4o-mini",
+        #"ollama:qwen3.5:0.8b",
+        model=model,
         tools=tools,
         backend=FilesystemBackend(
             root_dir=workdir,  # Absolute path to accessible directory

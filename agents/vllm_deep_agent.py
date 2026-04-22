@@ -16,6 +16,7 @@ from langchain_community.llms import VLLM
 
 
 
+
 workdir = os.getcwd()
 
 def print_message(response):
@@ -105,16 +106,16 @@ async def main():
             "simple_server": {
                 "transport": "stdio",  # Local subprocess communication
                 "command": "python",
-                "args": [os.path.join(workdir,"servers/simple_server.py")]
+                "args": [os.path.join(workdir, "servers/simple_server.py")]
             },
             "mensa_server": {
                 "transport": "stdio",  # Local subprocess communication
                 "command": "python",
-                "args": [os.path.join(workdir,"servers/parse_mensaar.py")]
+                "args": [os.path.join(workdir, "servers/parse_mensaar.py")]
             }
         }
     )
-
+  
     config = {
         "configurable": {
             "thread_id": "my-session-1"
@@ -124,7 +125,7 @@ async def main():
     tools = await client.get_tools()
 
     llm = VLLM(
-        model="Qwen/qwen3.5:0.8b",
+        model="qwen/qwen3.5:0.8b",
         trust_remote_code=True,  # mandatory for hf models
         max_new_tokens=128,
         top_k=10,

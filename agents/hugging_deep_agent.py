@@ -11,6 +11,7 @@ from copy import deepcopy
 import json
 import os
 from langchain_openai import ChatOpenAI
+from langchain.chat_models import init_chat_model
 
 
 
@@ -122,11 +123,12 @@ async def main():
 
     tools = await client.get_tools()
 
-    model = ChatOpenAI(
-        model="gpt-4o-mini",
-        temperature=0.1,
-        max_tokens=1000,
-        timeout=30
+
+    model = init_chat_model(
+        "Qwen/Qwen3.5-0.8B",
+        model_provider="huggingface",
+        temperature=0.7,
+        max_tokens=1024,
     )
 
     agent = create_deep_agent(
