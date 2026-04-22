@@ -7,3 +7,5 @@ langchain_mcp_adapters
 deepagents
 vllm
 langchain-ollama
+langchain_community
+langchain_huggingface
