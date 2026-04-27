@@ -13,6 +13,8 @@ import os
 from langchain_openai import ChatOpenAI
 from langchain_community.llms import VLLM
 
+import argparse
+
 
 
 
@@ -100,7 +102,7 @@ def format_model_answer(message: dict[str, str]) -> str:
     return s
 
 
-async def main():
+async def main(args):
     client = MultiServerMCPClient(
         {
             "simple_server": {
@@ -125,7 +127,7 @@ async def main():
     tools = await client.get_tools()
 
     llm = VLLM(
-        model="qwen/qwen3.5:0.8b",
+        model=args.model,
         trust_remote_code=True,  # mandatory for hf models
         max_new_tokens=128,
         top_k=10,
@@ -187,4 +189,9 @@ async def main():
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument("--model", type=str, help="LLM", default="")
+    args = parser.parse_args()
+
+    asyncio.run(main(args))
