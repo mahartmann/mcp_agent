@@ -11,7 +11,7 @@ from copy import deepcopy
 import json
 import os
 from langchain_openai import ChatOpenAI
-from langchain_community.llms import VLLM
+from langchain_community.llms import VLLM, VLLMOpenAI
 
 import argparse
 
@@ -108,12 +108,12 @@ async def main(args):
             "simple_server": {
                 "transport": "stdio",  # Local subprocess communication
                 "command": "python",
-                "args": [os.path.join(workdir, "../servers/simple_server.py")]
+                "args": [os.path.join(workdir, "servers/simple_server.py")]
             },
             "mensa_server": {
                 "transport": "stdio",  # Local subprocess communication
                 "command": "python",
-                "args": [os.path.join(workdir, "../servers/parse_mensaar.py")]
+                "args": [os.path.join(workdir, "servers/parse_mensaar.py")]
             }
         }
     )
@@ -126,7 +126,7 @@ async def main(args):
 
     tools = await client.get_tools()
 
-    llm = VLLM(
+    llm = VLLMOpenAI(
         model=args.model,
         trust_remote_code=True,  # mandatory for hf models
         max_new_tokens=128,
@@ -142,7 +142,7 @@ async def main(args):
         tools=tools,
 
         checkpointer=MemorySaver(),  # Required for multi-turn / persistence
-        
+
     )
 
     userfacing_prompt = "Hello, I am your DeepAgent. How may I help you?\n"
