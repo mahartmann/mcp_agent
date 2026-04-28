@@ -1,0 +1,24 @@
+# HTCondor submit file for LoRAHub Style Transfer Experiment
+# Uses queue syntax to pass multiple argument combinations
+
+universe                = vanilla
+initialdir              = /nethome/mareikeh/mcp_agent
+
+executable              = /nethome/mareikeh/mcp_agent/run_scripts/run_agent.sh
+
+output                  = /scratch/hartmann/logs/logs.$(ClusterId).$(ProcId).$(Year)_$(Month)_$(Day)_$(SUBMIT_TIME).out
+error                   = /scratch/hartmann/logs/logs.$(ClusterId).$(ProcId).$(Year)_$(Month)_$(Day)_$(SUBMIT_TIME).err
+log                     = /scratch/hartmann/logs/logs.$(ClusterId).$(ProcId).$(Year)_$(Month)_$(Day)_$(SUBMIT_TIME).log
+
+request_GPUs            = 1
+request_CPUs            = 16
+request_memory          = 80G
+getenv                  = True
+requirements            = (GPUs_GlobalMemoryMb >= 80000) 
+#&& (TARGET.Machine != "hopper-3.coli.uni-saarland.de")
++WantGPUHomeMounted     = true
++MaxWallTime            = 604800
+
+#accounting_group = pausable
+
+queue 1  
