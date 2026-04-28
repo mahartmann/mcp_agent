@@ -128,6 +128,7 @@ async def main(args):
 
     llm = VLLMOpenAI(
         model=args.model,
+        base_url= args.base_url,
         trust_remote_code=True,  # mandatory for hf models
         max_new_tokens=128,
         top_k=10,
@@ -184,7 +185,9 @@ async def main(args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("--model", type=str, help="LLM", default="")
+    parser.add_argument("--base_url", type=str, default="http://localhost:8080/v1")
+    parser.add_argument("--model", type=str, default="Gwen/Gwen3-8B")
+
     args = parser.parse_args()
 
     asyncio.run(main(args))
