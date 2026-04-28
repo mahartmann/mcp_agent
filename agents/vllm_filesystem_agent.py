@@ -110,12 +110,12 @@ async def main(args):
             "simple_server": {
                 "transport": "stdio",  # Local subprocess communication
                 "command": "python",
-                "args": [os.path.join(workdir, "../servers/simple_server.py")]
+                "args": [os.path.join(workdir, "servers/simple_server.py")]
             },
             "mensa_server": {
                 "transport": "stdio",  # Local subprocess communication
                 "command": "python",
-                "args": [os.path.join(workdir, "../servers/parse_mensaar.py")]
+                "args": [os.path.join(workdir, "servers/parse_mensaar.py")]
             }
         }
     )
