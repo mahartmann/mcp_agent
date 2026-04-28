@@ -110,6 +110,11 @@ async def main():
                 "transport": "stdio",  # Local subprocess communication
                 "command": "python",
                 "args": [os.path.join(workdir,"..","servers/parse_mensaar.py")]
+            },
+            "gmail": {
+                "transport": "http",
+                "url": "https://gmailmcp.googleapis.com/mcp/v1",
+                "headers":""
             }
         }
     )

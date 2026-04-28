@@ -26,7 +26,7 @@ def main(args):
 if __name__=="__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--base_url", type=str, default="http://localhost:8080/v1")
-    parser.add_argument("--model", type=str, default="Gwen/Gwen3-8B")
+    parser.add_argument("--model", type=str, default="/scratch/common_models/Qwen3-8B")
     args = parser.parse_args()
 
     main(args)
