@@ -1,8 +1,11 @@
+"""
+an agent with filesystem access backed by an LLM run via vllm as a server
+"""
 import asyncio
 from utils.coloring import print_user, print_assistant, print_environment
 from langchain_core.messages import HumanMessage, AIMessage, ToolMessage
 from langchain_mcp_adapters.client import MultiServerMCPClient
-from langchain.agents import create_agent
+from deepagents import create_deep_agent
 
 from deepagents.backends import FilesystemBackend
 from langgraph.checkpoint.memory import MemorySaver  # For persistence
@@ -11,7 +14,6 @@ from copy import deepcopy
 import json
 import os
 from langchain_openai import ChatOpenAI
-from langchain_community.llms import VLLM, VLLMOpenAI
 
 import argparse
 
@@ -108,12 +110,12 @@ async def main(args):
             "simple_server": {
                 "transport": "stdio",  # Local subprocess communication
                 "command": "python",
-                "args": [os.path.join(workdir, "servers/simple_server.py")]
+                "args": [os.path.join(workdir, "../servers/simple_server.py")]
             },
             "mensa_server": {
                 "transport": "stdio",  # Local subprocess communication
                 "command": "python",
-                "args": [os.path.join(workdir, "servers/parse_mensaar.py")]
+                "args": [os.path.join(workdir, "../servers/parse_mensaar.py")]
             }
         }
     )
@@ -131,12 +133,21 @@ async def main(args):
         base_url= args.base_url,
     )
 
-    agent = create_agent(
+    agent = create_deep_agent(
 
         model=llm,
         tools=tools,
 
+        backend=FilesystemBackend(
+            root_dir=workdir,  # Absolute path to accessible directory
+            virtual_mode=True  # Recommended: Normalize/sanitize paths
+        ),
         checkpointer=MemorySaver(),  # Required for multi-turn / persistence
+        interrupt_on={  # Optional: Human approval for file ops
+            "read_file": True,
+            "write_file": True,
+            "edit_file": True,
+        }
 
     )
 
